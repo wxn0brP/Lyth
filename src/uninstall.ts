@@ -3,6 +3,7 @@ import { getPackage } from "./utils/getMeta";
 import { getInstalledVersion, updateInstalled } from "./utils/installed";
 import { note } from "./utils/log";
 import { RunCfg, runHook } from "./utils/runHook";
+import { question } from "./utils/rl";
 
 export default async function (args: string[]) {
     if (args.length === 1) return note("Usage: lyth -S <package-name>");
@@ -18,18 +19,11 @@ export default async function (args: string[]) {
         note(`Package "${name}" has no install hook`);
         const pkgDir = process.env.HOME + "/apps/" + name;
         if (existsSync(pkgDir)) {
-            const readline = await import("readline");
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-            rl.question(`Do you want to remove "~/apps/${name}"? (y/N) `, async (answer) => {
-                if (answer.toLowerCase() === "y") {
-                    note(`Removing "${name}"...`);
-                    rmdirSync(pkgDir, { recursive: true });
-                }
-                rl.close();
-            });
+            const answer = await question(`Do you want to remove "~/apps/${name}"? (y/N) `, "n");
+            if (answer.toLowerCase() === "y") {
+                note(`Removing "${name}"...`);
+                rmdirSync(pkgDir, { recursive: true });
+            }
         }
         return;
     }
