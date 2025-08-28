@@ -4,3 +4,4 @@ dist
 .suglite_history
 package-lock.json
 yarn.lock
+bun.lock

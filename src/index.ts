@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
 import { execSync } from "child_process";
 
@@ -31,6 +31,10 @@ if (someCmd(["-S", "install", "i", "add"])) {
     execSync(`yarn global add github:wxn0brP/Lyth`, { stdio: "inherit" });
     process.exit(0);
 
+} else if (someCmd(["-v", "--version"])) {
+    const { version } = JSON.parse(readFileSync("./package.json", "utf-8"));
+    console.log(version);
+    process.exit(0);
 } else {
     mod = await import("./help.js");
     noteDebug("[Load] Help");
