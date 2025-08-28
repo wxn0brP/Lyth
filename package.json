@@ -4,7 +4,7 @@
     "main": "src/index.ts",
     "description": "Lyth is a package manager for linux",
     "bin": {
-        "lyth": "./dist/index.ts"
+        "lyth": "./src/index.ts"
     },
     "repository": {
         "type": "git",
