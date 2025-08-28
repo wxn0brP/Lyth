@@ -31,7 +31,7 @@ lyth uninstall <package-name>
 lyth update <package-name>
 
 # Update lyth itself
-lyth update-self
+lyth update-self | bash
 ```
 
 ## License

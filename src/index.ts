@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
+import { spawn } from "child_process";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
-import { execSync } from "child_process";
 
 const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev" || process.argv.includes("--dev");
 const isInterpreter = ["bun", "node"].some((i) => process.argv0.includes(i));
@@ -28,7 +28,7 @@ if (someCmd(["-S", "install", "i", "add"])) {
     noteDebug("[Load] Update");
 
 } else if (someCmd(["update-self"])) {
-    execSync(`yarn global add github:wxn0brP/Lyth`, { stdio: "inherit" });
+    console.log(`yarn global add github:wxn0brP/Lyth`);
     process.exit(0);
 
 } else if (someCmd(["-v", "--version"])) {
@@ -42,4 +42,4 @@ if (someCmd(["-S", "install", "i", "add"])) {
 
 await mod.default(args);
 
-export { }
+export { };
