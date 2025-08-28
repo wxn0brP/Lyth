@@ -32,7 +32,7 @@ if (someCmd(["-S", "install", "i", "add"])) {
     process.exit(0);
 
 } else if (someCmd(["-v", "--version"])) {
-    const { version } = JSON.parse(readFileSync("./package.json", "utf-8"));
+    const { version } = JSON.parse(readFileSync(import.meta.dirname + "/../package.json", "utf-8"));
     console.log(version);
     process.exit(0);
 } else {
