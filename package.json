@@ -1,0 +1,35 @@
+{
+    "name": "lyth",
+    "version": "0.0.1",
+    "main": "src/index.ts",
+    "description": "Lyth is a package manager for linux",
+    "bin": {
+        "lyth": "./dist/index.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/wxn0brp/Lyth.git"
+    },
+    "homepage": "https://github.com/wxn0brp/Lyth",
+    "author": "wxn0brP",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "bun": "bun run src/index.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^24.3.0",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "toml": "^3.0.0"
+    },
+    "engines": {
+        "bun": ">=1.2.20"
+    },
+    "files": [
+        "src/**/*",
+        "package.json"
+    ]
+}
