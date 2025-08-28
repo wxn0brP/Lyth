@@ -10,31 +10,26 @@ process.env.LYTH_CFG_PATH = isDev ? "./config/" : process.env.HOME + "/.config/l
 
 if (!existsSync(process.env.LYTH_CFG_PATH)) mkdirSync(process.env.LYTH_CFG_PATH, { recursive: true });
 
-function someCmd(arg: string[]) {
-    return args.some((a) => arg.includes(a));
+function someCmd(arg: string[], minArgs = 1) {
+    return args.some((a) => arg.includes(a) && args.length >= minArgs);
 }
 
 let mod: { default: (args: string[]) => Promise<void> };
-if (someCmd(["-S", "install", "i", "add"])) {
-    mod = await import("./install.js");
-    noteDebug("[Load] Install");
-
-} else if (someCmd(["-R", "uninstall", "rm", "remove"])) {
+if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     mod = await import("./uninstall.js");
     noteDebug("[Load] Uninstall");
 
-} else if (someCmd(["-u", "update", "up"])) {
-    mod = await import("./update.js");
-    noteDebug("[Load] Update");
-
-} else if (someCmd(["update-self"])) {
+} else if (someCmd(["update-self"], 0)) {
     console.log(`yarn global add github:wxn0brP/Lyth`);
     process.exit(0);
 
-} else if (someCmd(["-v", "--version"])) {
+} else if (someCmd(["-v", "--version"], 0)) {
     const { version } = JSON.parse(readFileSync(import.meta.dirname + "/../package.json", "utf-8"));
     console.log(version);
     process.exit(0);
+} else if (args.length > 0) {
+    mod = await import("./default.js");
+    noteDebug("[Load] Install");
 } else {
     mod = await import("./help.js");
     noteDebug("[Load] Help");

@@ -1,20 +1,10 @@
-import { getPackage } from "./utils/getMeta";
-import { getInstalledVersion, updateInstalled } from "./utils/installed";
+import { updateInstalled } from "./utils/installed";
 import { note } from "./utils/log";
 import { runHook } from "./utils/runHook";
 
-export default async function (args: string[]) {
-    if (args.length === 1) return note("Usage: lyth -U <package-name>");
-
-    const name = args[1];
-    const pkg = getPackage(name);
-
-    if (!pkg) return note(`Package "${name}" not found`);
-
+export async function update(name: string, pkg: any, version: string, args: string[]) {
     if (!pkg.update && !pkg.install) return note(`Package "${name}" has no update hook`);
-
     const isUpdate = pkg.update;
-    const version = getInstalledVersion(name) || "0.0.0";
 
     let latestVersion = "";
     if (pkg.getVersion) {

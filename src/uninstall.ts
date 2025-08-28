@@ -6,7 +6,7 @@ import { RunCfg, runHook } from "./utils/runHook";
 import { question } from "./utils/rl";
 
 export default async function (args: string[]) {
-    if (args.length === 1) return note("Usage: lyth -S <package-name>");
+    if (args.length === 1) return note("Usage: lyth -R <package-name>");
 
     const name = args[1];
     const pkg = getPackage(name);
