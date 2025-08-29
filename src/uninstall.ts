@@ -1,9 +1,9 @@
-import { existsSync, rmdirSync } from "fs";
+import { existsSync, rmSync } from "fs";
 import { getPackage } from "./utils/getMeta";
 import { getInstalledVersion, updateInstalled } from "./utils/installed";
 import { note } from "./utils/log";
-import { RunCfg, runHook } from "./utils/runHook";
 import { question } from "./utils/rl";
+import { RunCfg, runHook } from "./utils/runHook";
 
 export default async function (args: string[]) {
     if (args.length === 1) return note("Usage: lyth -R <package-name>");
@@ -22,7 +22,7 @@ export default async function (args: string[]) {
             const answer = await question(`Do you want to remove "~/apps/${name}"? (y/N) `, "n");
             if (answer.toLowerCase() === "y") {
                 note(`Removing "${name}"...`);
-                rmdirSync(pkgDir, { recursive: true });
+                rmSync(pkgDir, { recursive: true });
             }
         }
         return;

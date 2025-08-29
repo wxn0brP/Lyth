@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-import { spawn } from "child_process";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
 
@@ -11,12 +10,12 @@ process.env.LYTH_CFG_PATH = isDev ? "./config/" : process.env.HOME + "/.config/l
 if (!existsSync(process.env.LYTH_CFG_PATH)) mkdirSync(process.env.LYTH_CFG_PATH, { recursive: true });
 
 function someCmd(arg: string[], minArgs = 1) {
-    return args.some((a) => arg.includes(a) && args.length >= minArgs);
+    return args.length >= minArgs && arg[0] === args[0];
 }
 
 let mod: { default: (args: string[]) => Promise<void> };
 if (someCmd(["-R", "uninstall", "rm", "remove"])) {
-    mod = await import("./uninstall.js");
+    mod = await import("./uninstall");
     noteDebug("[Load] Uninstall");
 
 } else if (someCmd(["update-self"], 0)) {
@@ -27,11 +26,17 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     const { version } = JSON.parse(readFileSync(import.meta.dirname + "/../package.json", "utf-8"));
     console.log(version);
     process.exit(0);
+
+} else if (someCmd(["repo"], 2)) {
+    mod = await import("./repo");
+    noteDebug("[Load] Repo");
+
 } else if (args.length > 0) {
-    mod = await import("./default.js");
+    mod = await import("./default");
     noteDebug("[Load] Install");
+
 } else {
-    mod = await import("./help.js");
+    mod = await import("./help");
     noteDebug("[Load] Help");
 }
 
