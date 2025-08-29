@@ -1,5 +1,6 @@
 import { execSync } from "child_process";
-import { join, resolve } from "path";
+import { writeFileSync } from "fs";
+import { dirname, join, resolve } from "path";
 import { PkgCfg } from "../types/types";
 import { note } from "./log";
 
@@ -15,6 +16,7 @@ export interface RunCfg {
 
 export async function runHook(cfg: RunCfg) {
     const { name, pkg, hook, args, version } = cfg;
+    await import("./hookUtils");
 
     const ext = pkg[hook];
     const path = resolve(join(dir, name, hook) + "." + ext);
@@ -22,7 +24,8 @@ export async function runHook(cfg: RunCfg) {
     note(`[Run] hook ${path}`);
 
     process.env.LYTH_SRC = resolve(import.meta.dirname);
-    process.env.LYTH_PKG_VERSION = version
+    process.env.LYTH_PKG_VERSION = version;
+    process.env.LYTH_PKG_DIR_PATH = dirname(path);
     process.chdir(process.env.HOME + "/apps");
 
     const userShell = process.env.SHELL || "/bin/bash";
