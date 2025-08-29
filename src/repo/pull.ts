@@ -1,6 +1,6 @@
 import { existsSync } from "fs";
 import { execSync } from "child_process";
-import { getRepo } from "../utils/repo";
+import { getRepo, getRepos } from "../utils/repo";
 import { note } from "../utils/log";
 
 export async function repoPull(name: string) {
@@ -26,4 +26,10 @@ export async function repoPull(name: string) {
         : `git -C ${path} pull`;
 
     execSync(pullCmd, { stdio: "inherit" });
+}
+
+export async function repoPullAll() {
+    const repos = getRepos();
+    for (const name of Object.keys(repos))
+        await repoPull(name);
 }

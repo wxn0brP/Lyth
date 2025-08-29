@@ -1,4 +1,5 @@
 import { install } from "./install";
+import { repoPullAll } from "./repo/pull";
 import { PkgCfg } from "./types/types";
 import { update } from "./update";
 import { getPackage } from "./utils/getMeta";
@@ -9,15 +10,18 @@ export default async function (args: string[]) {
     let name = "";
     if (args[0] === "-S") {
         name = args[1];
-        // TODO update repo
+        note("Pulling all repos...");
+        await repoPullAll();
     } else {
         name = args[0];
     }
+    if (!name) return note("Usage: lyth <package-name>");
 
     const pkgConfig = getPackage(name);
     if (!pkgConfig) return note(`Package "${name}" not found`);
     let pkg: PkgCfg;
     [name, pkg] = pkgConfig;
+    note(`Installing "${name}"...`);
 
     const version = getInstalledVersion(name);
     if (version) {

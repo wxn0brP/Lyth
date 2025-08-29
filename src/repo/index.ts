@@ -1,6 +1,6 @@
 import { getRepos } from "../utils/repo";
 import { addRepo } from "./add";
-import { repoPull } from "./pull";
+import { repoPull, repoPullAll } from "./pull";
 import { removeRepo } from "./rm";
 
 export default async function (args: string[]) {
@@ -27,12 +27,20 @@ export default async function (args: string[]) {
             console.log(Object.keys(repos).map(k => `${k}: ${repos[k]}`).join("\n"));
             break;
         case "pull":
+        case "update":
+        case "up":
         case "-S":
             if (args.length < 1) return console.log("Usage: lyth repo pull <name>");
             await repoPull(args[0]);
             break;
+        case "pull-all":
+        case "pa":
+        case "up-all":
+        case "update-all":
+            await repoPullAll();
+            break;
         default:
-            console.log("Usage: lyth repo <add|remove|list|pull>");
+            console.log("Usage: lyth repo <add|remove|list|pull|pull-all>");
             break;
     }
 }
