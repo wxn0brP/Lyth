@@ -21,6 +21,10 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     mod = await import("./list");
     noteDebug("[Load] List");
 
+} else if (someCmd(["search", "s"])) {
+    mod = await import("./search");
+    noteDebug("[Load] Search");
+
 } else if (someCmd(["update-self"], 0)) {
     console.log(`yarn global add github:wxn0brP/Lyth`);
     process.exit(0);

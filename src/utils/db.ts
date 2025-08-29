@@ -9,7 +9,7 @@ function getFile(db: DBS) {
     return process.env.LYTH_CFG_PATH + db + ".json";
 }
 
-function getData(db: DBS) {
+function getData<T = any>(db: DBS): Record<string, T> {
     try {
         return JSON.parse(readFileSync(getFile(db), "utf-8"));
     } catch {
@@ -17,7 +17,7 @@ function getData(db: DBS) {
     }
 }
 
-function setInstalled(db: DBS, data: any) {
+function setInstalled<T = any>(db: DBS, data: Record<string, T>) {
     try {
         writeFileSync(getFile(db), JSON.stringify(data, null, 2));
     } catch (e) {
@@ -30,7 +30,6 @@ function update<T = any>(db: DBS, name: string, data: T) {
     d[name] = data;
     setInstalled(db, d);
 }
-
 
 function remove(db: DBS, name: string) {
     const d = getData(db);
