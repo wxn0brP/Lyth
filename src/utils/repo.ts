@@ -3,7 +3,7 @@ import { parse } from "toml";
 
 const file = process.env.LYTH_CFG_PATH + "repos.toml";
 
-export function getRepos() {
+export function getRepos(): Record<string, string> {
     try {
         return parse(readFileSync(file, "utf-8"));
     } catch {

@@ -3,7 +3,7 @@ import { join, resolve } from "path";
 import { PkgCfg } from "../types/types";
 import { note } from "./log";
 
-const dir = process.env.LYTH_CFG_PATH + "packages/";
+const dir = process.env.LYTH_CFG_PATH + "repos/";
 
 export interface RunCfg {
     name: string,

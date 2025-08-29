@@ -13,7 +13,7 @@ export function getInstalled() {
 
 export function setInstalled(db: any) {
     try {
-        const data = Object.entries(db).map(([k, v]) => `${k} = "${v}"`).join("\n");
+        const data = Object.entries(db).map(([k, v]) => `"${k}" = "${v}"`).join("\n");
         writeFileSync(file, data);
     } catch (e) {
         console.error(e);

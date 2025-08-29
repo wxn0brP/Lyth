@@ -1,4 +1,5 @@
 import { install } from "./install";
+import { PkgCfg } from "./types/types";
 import { update } from "./update";
 import { getPackage } from "./utils/getMeta";
 import { getInstalledVersion } from "./utils/installed";
@@ -13,8 +14,10 @@ export default async function (args: string[]) {
         name = args[0];
     }
 
-    const pkg = getPackage(name);
-    if (!pkg) return note(`Package "${name}" not found`);
+    const pkgConfig = getPackage(name);
+    if (!pkgConfig) return note(`Package "${name}" not found`);
+    let pkg: PkgCfg;
+    [name, pkg] = pkgConfig;
 
     const version = getInstalledVersion(name);
     if (version) {

@@ -22,6 +22,7 @@ export default async function (args: string[]) {
             await removeRepo(args[0]);
             break;
         case "list":
+        case "ls":
             const repos = getRepos();
             console.log(Object.keys(repos).map(k => `${k}: ${repos[k]}`).join("\n"));
             break;

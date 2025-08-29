@@ -9,14 +9,18 @@ process.env.LYTH_CFG_PATH = isDev ? "./config/" : process.env.HOME + "/.config/l
 
 if (!existsSync(process.env.LYTH_CFG_PATH)) mkdirSync(process.env.LYTH_CFG_PATH, { recursive: true });
 
-function someCmd(arg: string[], minArgs = 1) {
-    return args.length >= minArgs && arg[0] === args[0];
+function someCmd(requiredCmds: string[], minArgs = 1) {
+    return args.length >= minArgs && requiredCmds.includes(args[0]);
 }
 
 let mod: { default: (args: string[]) => Promise<void> };
 if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     mod = await import("./uninstall");
     noteDebug("[Load] Uninstall");
+
+} else if (someCmd(["list", "ls"], 0)) {
+    mod = await import("./list");
+    noteDebug("[Load] List");
 
 } else if (someCmd(["update-self"], 0)) {
     console.log(`yarn global add github:wxn0brP/Lyth`);

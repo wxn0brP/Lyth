@@ -2,14 +2,11 @@ import { existsSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { parse } from "toml";
 import { PkgCfg } from "../types/types";
+import { getRepos } from "./repo";
 
-const dir: string = process.env.LYTH_CFG_PATH + "packages/";
+const dir: string = process.env.LYTH_CFG_PATH + "repos/";
 
 if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-
-export function getDirectories(): string[] {
-    return readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
-}
 
 export function getPackageRaw(name: string): Partial<PkgCfg> | null {
     try {
@@ -30,7 +27,11 @@ function exists(pkg: string, hook: string): "sh" | "ts" | "js" | "" {
     return "";
 }
 
-export function getPackage(name: string): PkgCfg {
+export function getPackage(name: string): [string, PkgCfg] {
+    if (!name.includes("/")) {
+        return getPackageByRepos(name);
+    }
+
     if (!existsSync(join(dir, name))) return null;
 
     const pkg: Partial<PkgCfg> = {};
@@ -47,5 +48,14 @@ export function getPackage(name: string): PkgCfg {
     loadHook("preinstall");
     loadHook("getVersion");
 
-    return pkg as PkgCfg;
+    return [name, pkg as PkgCfg];
+}
+
+export function getPackageByRepos(name: string): [string, PkgCfg] {
+    const repos = getRepos();
+    for (const repoName of Object.keys(repos)) {
+        const pkg = getPackage(repoName + "/" + name);
+        if (pkg) return pkg;
+    }
+    return null;
 }

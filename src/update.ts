@@ -1,8 +1,9 @@
+import { PkgCfg } from "./types/types";
 import { updateInstalled } from "./utils/installed";
 import { note } from "./utils/log";
 import { runHook } from "./utils/runHook";
 
-export async function update(name: string, pkg: any, version: string, args: string[]) {
+export async function update(name: string, pkg: PkgCfg, version: string, args: string[]) {
     if (!pkg.update && !pkg.install) return note(`Package "${name}" has no update hook`);
     const isUpdate = pkg.update;
 

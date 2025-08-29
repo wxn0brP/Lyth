@@ -4,13 +4,16 @@ import { getInstalledVersion, updateInstalled } from "./utils/installed";
 import { note } from "./utils/log";
 import { question } from "./utils/rl";
 import { RunCfg, runHook } from "./utils/runHook";
+import { PkgCfg } from "./types/types";
 
 export default async function (args: string[]) {
     if (args.length === 1) return note("Usage: lyth -R <package-name>");
 
-    const name = args[1];
-    const pkg = getPackage(name);
-    if (!pkg) return note(`Package "${name}" not found`);
+    let name = args[1];
+    const pkgConfig = getPackage(name);
+    if (!pkgConfig) return note(`Package "${name}" not found`);
+    let pkg: PkgCfg;
+    [name, pkg] = pkgConfig;
 
     const version = getInstalledVersion(name);
     if (!version) return note(`Package "${name}" is not installed`);
