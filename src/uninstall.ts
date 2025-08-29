@@ -1,10 +1,10 @@
 import { existsSync, rmSync } from "fs";
 import { getPackage } from "./utils/getMeta";
-import { getInstalledVersion, updateInstalled } from "./utils/installed";
 import { note } from "./utils/log";
 import { question } from "./utils/rl";
 import { RunCfg, runHook } from "./utils/runHook";
 import { PkgCfg } from "./types/types";
+import db, { DBS } from "./utils/db";
 
 export default async function (args: string[]) {
     if (args.length === 1) return note("Usage: lyth -R <package-name>");
@@ -15,7 +15,7 @@ export default async function (args: string[]) {
     let pkg: PkgCfg;
     [name, pkg] = pkgConfig;
 
-    const version = getInstalledVersion(name);
+    const version = db.get(DBS.INSTALLED, name);
     if (!version) return note(`Package "${name}" is not installed`);
 
     if (!pkg.uninstall) {
@@ -41,5 +41,5 @@ export default async function (args: string[]) {
     if (pkg.preinstall) await runHook(Object.assign({}, cfg, { hook: "preinstall" }) as RunCfg);
 
     const installedVersion = await runHook(cfg);
-    updateInstalled(name, installedVersion.trim() || "0.0.0");
+    db.update(DBS.INSTALLED, name, installedVersion.trim() || "0.0.0");
 }

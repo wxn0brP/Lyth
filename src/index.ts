@@ -2,10 +2,9 @@
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
 
-const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev" || process.argv.includes("--dev");
 const isInterpreter = ["bun", "node"].some((i) => process.argv0.includes(i));
 const args = process.argv.slice(isInterpreter ? 2 : 1);
-process.env.LYTH_CFG_PATH = isDev ? "./config/" : process.env.HOME + "/.config/lyth.d/";
+process.env.LYTH_CFG_PATH = process.env.HOME + "/.config/lyth.d/";
 
 if (!existsSync(process.env.LYTH_CFG_PATH)) mkdirSync(process.env.LYTH_CFG_PATH, { recursive: true });
 

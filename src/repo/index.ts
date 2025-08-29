@@ -1,4 +1,4 @@
-import { getRepos } from "../utils/repo";
+import db, { DBS } from "../utils/db";
 import { addRepo } from "./add";
 import { repoPull, repoPullAll } from "./pull";
 import { removeRepo } from "./rm";
@@ -23,7 +23,7 @@ export default async function (args: string[]) {
             break;
         case "list":
         case "ls":
-            const repos = getRepos();
+            const repos = db.getData(DBS.REPOS);
             console.log(Object.keys(repos).map(k => `${k}: ${repos[k]}`).join("\n"));
             break;
         case "pull":

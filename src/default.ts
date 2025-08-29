@@ -2,8 +2,8 @@ import { install } from "./install";
 import { repoPullAll } from "./repo/pull";
 import { PkgCfg } from "./types/types";
 import { update } from "./update";
+import db, { DBS } from "./utils/db";
 import { getPackage } from "./utils/getMeta";
-import { getInstalledVersion } from "./utils/installed";
 import { note } from "./utils/log";
 
 export default async function (args: string[]) {
@@ -23,7 +23,7 @@ export default async function (args: string[]) {
     [name, pkg] = pkgConfig;
     note(`Installing "${name}"...`);
 
-    const version = getInstalledVersion(name);
+    const version = db.get(DBS.INSTALLED, name);
     if (version) {
         await update(name, pkg, version, args);
     } else {

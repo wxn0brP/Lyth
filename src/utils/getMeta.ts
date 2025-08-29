@@ -1,8 +1,7 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync } from "fs";
 import { join } from "path";
-import { parse } from "toml";
 import { PkgCfg } from "../types/types";
-import { getRepos } from "./repo";
+import db, { DBS } from "./db";
 
 const dir: string = process.env.LYTH_CFG_PATH + "repos/";
 
@@ -11,9 +10,9 @@ if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
 export function getPackageRaw(name: string): Partial<PkgCfg> | null {
     try {
         const path = join(dir, name);
-        const file = join(path, "pkg.toml");
+        const file = join(path, "pkg.json");
         const data = readFileSync(file, "utf-8");
-        return parse(data);
+        return JSON.parse(data);
     } catch {
         return null;
     }
@@ -52,7 +51,7 @@ export function getPackage(name: string): [string, PkgCfg] {
 }
 
 export function getPackageByRepos(name: string): [string, PkgCfg] {
-    const repos = getRepos();
+    const repos = db.getData(DBS.REPOS);
     for (const repoName of Object.keys(repos)) {
         const pkg = getPackage(repoName + "/" + name);
         if (pkg) return pkg;

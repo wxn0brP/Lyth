@@ -1,6 +1,6 @@
 {
     "name": "lyth",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "main": "src/index.ts",
     "description": "Lyth is a package manager for linux",
     "bin": {
@@ -22,9 +22,7 @@
         "@types/node": "^24.3.0",
         "typescript": "^5.8.3"
     },
-    "dependencies": {
-        "toml": "^3.0.0"
-    },
+    "dependencies": {},
     "engines": {
         "bun": ">=1.2.20"
     },

@@ -1,9 +1,9 @@
 import { existsSync, rmSync } from "fs";
-import { removeRepo as _removeRepo, getRepo } from "../utils/repo";
 import { note } from "../utils/log";
+import db, { DBS } from "../utils/db";
 
 export async function removeRepo(name: string) {
-    if (!getRepo(name))
+    if (!db.get(DBS.REPOS, name))
         return note(`Repo "${name}" not found`);
 
     note(`Removing "${name}"...`);
@@ -13,5 +13,5 @@ export async function removeRepo(name: string) {
     if (existsSync(path))
         rmSync(path, { recursive: true, force: true });
 
-    _removeRepo(name);
+    db.remove(DBS.REPOS, name);
 }

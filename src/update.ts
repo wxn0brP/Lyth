@@ -1,5 +1,5 @@
 import { PkgCfg } from "./types/types";
-import { updateInstalled } from "./utils/installed";
+import db, { DBS } from "./utils/db";
 import { note } from "./utils/log";
 import { runHook } from "./utils/runHook";
 
@@ -31,5 +31,5 @@ export async function update(name: string, pkg: PkgCfg, version: string, args: s
 
     res = latestVersion || res.trim() || "0.0.0";
     if (res === version) return note(`Package "${name}" is already up to date`);
-    updateInstalled(name, res);
+    db.update(DBS.INSTALLED, name, res);
 }

@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { existsSync, rmSync } from "fs";
-import { addRepo as _addRepo } from "../utils/repo";
 import { note } from "../utils/log";
+import db, { DBS } from "../utils/db";
 
 export async function addRepo(name: string, url: string) {
     const origUrl = url;
@@ -20,5 +20,5 @@ export async function addRepo(name: string, url: string) {
     note(`Adding "${name}"...`);
     const branchArg = branch ? `-b ${branch}` : "";
     execSync(`git clone ${branchArg} ${url} ${path}`);
-    _addRepo(name, origUrl);
+    db.add(DBS.REPOS, name, origUrl);
 }

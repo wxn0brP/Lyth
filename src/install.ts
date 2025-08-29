@@ -1,5 +1,5 @@
 import { PkgCfg } from "./types/types";
-import { updateInstalled } from "./utils/installed";
+import db, { DBS } from "./utils/db";
 import { note } from "./utils/log";
 import { RunCfg, runHook } from "./utils/runHook";
 
@@ -17,5 +17,5 @@ export async function install(name: string, pkg: PkgCfg, args: string[]) {
     if (pkg.preinstall) await runHook(Object.assign({}, cfg, { hook: "preinstall" }) as RunCfg);
 
     const installedVersion = await runHook(cfg);
-    updateInstalled(name, installedVersion.trim() || "0.0.0");
+    db.update(DBS.INSTALLED, name, installedVersion.trim() || "0.0.0");
 }

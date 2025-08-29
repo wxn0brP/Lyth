@@ -1,10 +1,10 @@
-import { existsSync } from "fs";
 import { execSync } from "child_process";
-import { getRepo, getRepos } from "../utils/repo";
+import { existsSync } from "fs";
+import db, { DBS } from "../utils/db";
 import { note } from "../utils/log";
 
 export async function repoPull(name: string) {
-    const repo = getRepo(name);
+    const repo = db.get(DBS.REPOS, name);
     if (!repo)
         throw new Error(`Repository "${name}" is not registered.`);
 
@@ -29,7 +29,7 @@ export async function repoPull(name: string) {
 }
 
 export async function repoPullAll() {
-    const repos = getRepos();
+    const repos = db.getData(DBS.REPOS);
     for (const name of Object.keys(repos))
         await repoPull(name);
 }

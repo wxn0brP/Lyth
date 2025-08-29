@@ -1,5 +1,5 @@
 {
-    "cmd": "tsc --noEmit && NODE_ENV=development bun run src/index.ts",
+    "cmd": "tsc --noEmit && bun run src/index.ts",
     "watch": [
         "src"
     ],
