@@ -12,6 +12,7 @@ To install Lyth, you need to have [Bun](https://bun.sh/) and [Yarn 1.x.x](https:
 
 ```bash
 yarn global add github:wxn0brP/Lyth
+lyth repo add Lyth wxn0brP/Lyth-repo#master
 ```
 
 ## Usage
