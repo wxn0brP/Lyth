@@ -10,7 +10,6 @@ export default async function (args: string[]) {
     let name = "";
     if (args[0] === "-S") {
         name = args[1];
-        note("Pulling all repos...");
         await repoPullAll();
     } else {
         name = args[0];

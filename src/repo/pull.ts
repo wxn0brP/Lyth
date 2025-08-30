@@ -4,6 +4,7 @@ import db, { DBS } from "../utils/db";
 import { note } from "../utils/log";
 
 export async function repoPull(name: string) {
+    note("Pulling all repos...");
     const repo = db.get(DBS.REPOS, name);
     if (!repo)
         throw new Error(`Repository "${name}" is not registered.`);

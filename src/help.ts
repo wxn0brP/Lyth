@@ -9,7 +9,7 @@ Version: ${version}
 Commands:
     [-S] name                               Install a package (-S refreshes the repo)
     -R, rm                                  Uninstall a package
-    -u, update, up                          Update a package
+    update, up                              Update all packages
     list, ls                                List installed packages
     search, s                               Search for packages
 

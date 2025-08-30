@@ -4,6 +4,7 @@ import db, { DBS } from "./utils/db";
 import { getPackage } from "./utils/getMeta";
 import { isMatch } from "micromatch";
 import { join } from "path";
+import { s } from "./utils/s";
 
 const dir: string = process.env.LYTH_CFG_PATH + "repos/";
 
@@ -15,13 +16,13 @@ function convert(pkg: [string, PkgCfg]) {
 }
 
 function match(pkg: [string, PkgCfg], name: string) {
-    const pkgPath = pkg[0].split("/")[1].toLowerCase()
+    const pkgPath = pkg[0].split("/")[1];
     if (isMatch(pkgPath, name)) return true;
 
-    const pkgName = pkg[1]?.name?.toLowerCase();
+    const pkgName = pkg[1]?.name;
     if (pkgName && isMatch(pkgName, name)) return true;
 
-    const desc = pkg[1]?.description?.toLowerCase();
+    const desc = pkg[1]?.description;
     if (desc && isMatch(desc, name)) return true;
     return false;
 }
@@ -53,6 +54,7 @@ export async function search(name: string) {
 }
 
 export default async function (args: string[]) {
+    await s(args);
     const pkgs = await search(args[1]);
     if (pkgs.length === 0) return console.log("No packages found");
     console.table(pkgs);

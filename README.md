@@ -30,8 +30,7 @@ lyth <package-name>
 lyth -R <package-name>
 lyth rm <package-name>
 
-# Update a package
-lyth -u <package-name>
+# Update all a package
 lyth update <package-name>
 lyth up <package-name>
 

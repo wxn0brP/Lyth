@@ -1,5 +1,6 @@
 import { PkgCfg } from "./types/types";
 import db, { DBS } from "./utils/db";
+import { getPackage } from "./utils/getMeta";
 import { note } from "./utils/log";
 import { runHook } from "./utils/runHook";
 
@@ -32,4 +33,16 @@ export async function update(name: string, pkg: PkgCfg, version: string, args: s
     res = latestVersion || res.trim() || "0.0.0";
     if (res === version) return note(`Package "${name}" is already up to date`);
     db.update(DBS.INSTALLED, name, res);
+}
+
+export async function updateAll(args: string[] = []) {
+    const installed = db.getData<string>(DBS.INSTALLED);
+    const pkgs = Object.keys(installed);
+    if (pkgs.length === 0) return note("No packages installed");
+
+    for (const pkgName of pkgs) {
+        const version = installed[pkgName];
+        const [name, pkg] = getPackage(pkgName);
+        await update(name, pkg, version, args);
+    }
 }
