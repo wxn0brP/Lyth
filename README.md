@@ -9,13 +9,16 @@ It allows you to install, uninstall, and update applications through a simple co
 
 ## Installation
 
-To install Lyth, you need to have [Bun](https://bun.sh/) and
-[Yarn 1.x.x](https://npmjs.com/package/yarn) installed on your system.
+Make sure [Bun](https://bun.sh/) is installed. Then run:
 
 ```bash
-yarn global add github:wxn0brP/Lyth
-lyth repo add Lyth wxn0brP/Lyth-repo#master
+curl -fsSL https://raw.githubusercontent.com/wxn0brP/Lyth/main/install.sh | bash
 ```
+
+This will:
+* Clone the Lyth repository into `~/apps/Lyth`
+* Prepare the repository (install dependencies)
+* Create a symlink in `~/.local/bin/lyth` so you can run `lyth` from anywhere
 
 ## Usage
 
@@ -50,7 +53,7 @@ lyth repo pull <name>
 lyth repo pull-all
 
 # Update lyth itself
-lyth update-self | bash
+lyth update-self
 
 # Show version
 lyth -v

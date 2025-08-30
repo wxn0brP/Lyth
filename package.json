@@ -20,8 +20,8 @@
     },
     "devDependencies": {
         "@types/micromatch": "^4.0.9",
-        "@types/node": "^24.3.0",
-        "typescript": "^5.8.3"
+        "@types/bun": "*",
+        "typescript": "*"
     },
     "dependencies": {
         "micromatch": "^4.0.8"

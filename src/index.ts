@@ -30,7 +30,7 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     noteDebug("[Load] UpdateAll");
 
 } else if (someCmd(["update-self"], 0)) {
-    console.log(`yarn global add github:wxn0brP/Lyth`);
+    console.log(`${process.env.HOME}/apps/Lyth/update.sh`);
     process.exit(0);
 
 } else if (someCmd(["-v", "--version"], 0)) {
