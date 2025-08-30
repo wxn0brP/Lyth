@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
+import { $ } from "bun";
 
 const isInterpreter = ["bun", "node"].some((i) => process.argv0.includes(i));
 const args = process.argv.slice(isInterpreter ? 2 : 1);
@@ -30,7 +31,7 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     noteDebug("[Load] UpdateAll");
 
 } else if (someCmd(["update-self"], 0)) {
-    console.log(`${process.env.HOME}/apps/Lyth/update.sh`);
+    await $`${process.env.HOME}/apps/Lyth/update.sh`;
     process.exit(0);
 
 } else if (someCmd(["-v", "--version"], 0)) {
