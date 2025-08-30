@@ -12,7 +12,7 @@ It allows you to install, uninstall, and update applications through a simple co
 Make sure [Bun](https://bun.sh/) is installed. Then run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wxn0brP/Lyth/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wxn0brP/Lyth/master/install.sh | bash
 ```
 
 This will:
