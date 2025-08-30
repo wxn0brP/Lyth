@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
+import { $ } from "bun";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
-import { $ } from "bun";
 
 const isInterpreter = ["bun", "node"].some((i) => process.argv0.includes(i));
 const args = process.argv.slice(isInterpreter ? 2 : 1);
@@ -43,13 +43,18 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     mod = await import("./repo");
     noteDebug("[Load] Repo");
 
+} else if (someCmd(["-h", "--help"], 0)) {
+    mod = await import("./help");
+    noteDebug("[Load] Help");
+
 } else if (args.length > 0) {
     mod = await import("./default");
     noteDebug("[Load] Install");
 
 } else {
-    mod = await import("./help");
-    noteDebug("[Load] Help");
+    mod = await import("./updateAll");
+    args.push("", "-S");
+    noteDebug("[Load] Full update");
 }
 
 await mod.default(args);
