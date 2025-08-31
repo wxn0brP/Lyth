@@ -40,10 +40,12 @@ lyth up <package-name>
 # List installed packages
 lyth list
 lyth ls
+lyth ls -json # for json output
 
 # Search for packages
 lyth search <query>
 lyth s <query>
+lyth s <query> -json # for json output
 
 # Repository management
 lyth repo add <name> <url>

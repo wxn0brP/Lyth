@@ -5,6 +5,7 @@ import { getPackage } from "./utils/getMeta";
 import { isMatch } from "micromatch";
 import { join } from "path";
 import { s } from "./utils/s";
+import { printTable } from "./utils/table";
 
 const dir: string = process.env.LYTH_CFG_PATH + "repos/";
 
@@ -57,5 +58,5 @@ export default async function (args: string[]) {
     await s(args);
     const pkgs = await search(args[1]);
     if (pkgs.length === 0) return console.log("No packages found");
-    console.table(pkgs);
+    printTable(pkgs, args);
 }
