@@ -21,6 +21,9 @@ chmod +x update.sh
 chmod +x src/index.ts
 ./update.sh
 
+# Add the Lyth repo
+./src/index.ts repo add Lyth wxn0brP/Lyth-repo#master
+
 mkdir -p "$HOME/.local/bin"
 
 # If the link does not exist or points to something else - update
