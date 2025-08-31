@@ -34,8 +34,7 @@ lyth -R <package-name>
 lyth rm <package-name>
 
 # Update all a package
-lyth update <package-name>
-lyth up <package-name>
+lyth
 
 # List installed packages
 lyth list
