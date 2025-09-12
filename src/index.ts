@@ -53,7 +53,7 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
 
 } else {
     mod = await import("./updateAll");
-    args.push("", "-S");
+    args.push("");
     noteDebug("[Load] Full update");
 }
 

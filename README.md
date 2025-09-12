@@ -25,9 +25,9 @@ This will:
 ```bash
 # Install a package
 # with refreshing repos (preferred)
-lyth -S <package-name>
-# without refreshing repos
 lyth <package-name>
+# without refreshing repos
+lyth -N <package-name>
 
 # Uninstall a package
 lyth -R <package-name>

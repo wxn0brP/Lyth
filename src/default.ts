@@ -8,11 +8,11 @@ import { note } from "./utils/log";
 
 export default async function (args: string[]) {
     let name = "";
-    if (args[0] === "-S") {
+    if (args[0] === "-N") {
         name = args[1];
-        await repoPullAll();
     } else {
         name = args[0];
+        await repoPullAll();
     }
     if (!name) return note("Usage: lyth <package-name>");
 

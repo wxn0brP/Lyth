@@ -7,7 +7,7 @@ Usage: lyth <command> [args]
 Version: ${version}
 
 Commands:
-    [-S] name                               Install a package (-S refreshes the repo)
+    name                                    Install a package
     -R, rm                                  Uninstall a package
     update, up                              Update all packages
     list, ls                                List installed packages
