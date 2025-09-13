@@ -1,5 +1,4 @@
 import { execSync } from "child_process";
-import { writeFileSync } from "fs";
 import { dirname, join, resolve } from "path";
 import { PkgCfg } from "../types/types";
 import { note } from "./log";

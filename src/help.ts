@@ -19,6 +19,7 @@ Commands:
         list                                List repositories
         pull <name>                         Update a repository
         pull-all, pa                        Update all repositories
+        create-meta <name>                  Add existing repository to database
 
     update-self                             Update lyth
     -v, --version                           Show version

@@ -1,5 +1,5 @@
 import db, { DBS } from "../utils/db";
-import { addRepo } from "./add";
+import { addRepo, addRepoMeta } from "./add";
 import { repoPull, repoPullAll } from "./pull";
 import { removeRepo } from "./rm";
 
@@ -38,6 +38,9 @@ export default async function (args: string[]) {
         case "up-all":
         case "update-all":
             await repoPullAll();
+            break;
+        case "create-meta":
+            await addRepoMeta(args[0]);
             break;
         default:
             console.log("Usage: lyth repo <add|remove|list|pull|pull-all>");

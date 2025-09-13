@@ -23,6 +23,8 @@ chmod +x src/index.ts
 
 # Add the Lyth repo
 ./src/index.ts repo add Lyth wxn0brP/Lyth-repo#master
+mkdir -p "$HOME/.config/lyth.d/repos/custom"
+./src/index.ts repo create-meta custom
 
 mkdir -p "$HOME/.local/bin"
 

@@ -4,19 +4,20 @@ import db, { DBS } from "../utils/db";
 import { note } from "../utils/log";
 
 export async function repoPull(name: string) {
-    note("Pulling all repos...");
     const repo = db.get(DBS.REPOS, name);
     if (!repo)
         throw new Error(`Repository "${name}" is not registered.`);
-
-    note(`Pulling "${name}"...`);
 
     const path = `${process.env.LYTH_CFG_PATH}repos/${name}`;
     if (!existsSync(path))
         throw new Error(`Path for "${name}" does not exist.`);
 
-    if (!existsSync(`${path}/.git`))
-        throw new Error(`Path "${path}" is not a git repository.`);
+    if (!existsSync(`${path}/.git`)) {
+        note(`Repository "${name}" is not a git repository. Skipping...`);
+        return;
+    }
+
+    note(`Pulling "${name}"...`);
 
     let branch = "";
     const [_, maybeBranch] = repo.split("#", 2);
@@ -30,6 +31,7 @@ export async function repoPull(name: string) {
 }
 
 export async function repoPullAll() {
+    note("Pulling all repos...");
     const repos = db.getData(DBS.REPOS);
     for (const name of Object.keys(repos))
         await repoPull(name);

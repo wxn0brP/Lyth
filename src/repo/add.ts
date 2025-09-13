@@ -1,7 +1,16 @@
 import { execSync } from "child_process";
-import { existsSync, rmSync } from "fs";
+import { cpSync, existsSync, rmSync } from "fs";
 import { note } from "../utils/log";
 import db, { DBS } from "../utils/db";
+
+const validPrefixes = ["http://", "https://", "git@", "ssh://", "git+", "file://"];
+
+function rmRepoDir(path: string, name: string) {
+    if (existsSync(path)) {
+        note(`Repository "${name}" already exists. Removing "${path}"...`);
+        rmSync(path, { recursive: true, force: true });
+    }
+}
 
 export async function addRepo(name: string, url: string) {
     const origUrl = url;
@@ -10,15 +19,33 @@ export async function addRepo(name: string, url: string) {
     if (url.includes("#"))
         [url, branch] = url.split("#");
 
-    if (!/^https?:\/\//.test(url) && !url.startsWith("git@"))
-        url = "https://github.com/" + url;
-
     const path = process.env.LYTH_CFG_PATH + "repos/" + name;
-    if (existsSync(path))
-        rmSync(path, { recursive: true });
 
+    if (/^\/|^\.\.?\//.test(url)) {
+        if (!existsSync(url)) {
+            throw new Error(`Local path does not exist: ${url}`);
+        }
+
+        rmRepoDir(path, name);
+        note(`Copying local repository "${name}" from "${url}"...`);
+        cpSync(url, path, { recursive: true });
+        db.add(DBS.REPOS, name, path);
+        return;
+    }
+
+    if (!validPrefixes.some(prefix => url.startsWith(prefix))) {
+        url = "https://github.com/" + url;
+    }
+
+    rmRepoDir(path, name);
     note(`Adding "${name}"...`);
     const branchArg = branch ? `-b ${branch}` : "";
     execSync(`git clone ${branchArg} ${url} ${path}`);
     db.add(DBS.REPOS, name, origUrl);
+}
+
+export async function addRepoMeta(name: string) {
+    const path = process.env.LYTH_CFG_PATH + "repos/" + name;
+    note(`Adding meta for "${name}"...`);
+    db.add(DBS.REPOS, name, path);
 }
