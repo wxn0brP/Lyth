@@ -13,11 +13,11 @@ export async function repoPull(name: string) {
         throw new Error(`Path for "${name}" does not exist.`);
 
     if (!existsSync(`${path}/.git`)) {
-        note(`Repository "${name}" is not a git repository. Skipping...`);
+        note(`Repository "${name}" is not a git repository. Skipping...`, "REPO");
         return;
     }
 
-    note(`Pulling "${name}"...`);
+    note(`Pulling "${name}"...`, "REPO");
 
     let branch = "";
     const [_, maybeBranch] = repo.split("#", 2);
@@ -31,7 +31,7 @@ export async function repoPull(name: string) {
 }
 
 export async function repoPullAll() {
-    note("Pulling all repos...");
+    note("Pulling all repos...", "REPO");
     const repos = db.getData(DBS.REPOS);
     for (const name of Object.keys(repos))
         await repoPull(name);

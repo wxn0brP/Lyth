@@ -6,7 +6,7 @@ import { printTable } from "./utils/table";
 export default async function (args: string[]) {
     const installed = db.getData<string>(DBS.INSTALLED);
     const pkgs = Object.keys(installed);
-    if (pkgs.length === 0) return note("No packages installed");
+    if (pkgs.length === 0) return note("No packages installed", "LIST");
 
     if (!args.includes("-json")) console.log("Installed packages:");
     const packages: any = [];

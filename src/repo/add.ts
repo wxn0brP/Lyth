@@ -7,7 +7,7 @@ const validPrefixes = ["http://", "https://", "git@", "ssh://", "git+", "file://
 
 function rmRepoDir(path: string, name: string) {
     if (existsSync(path)) {
-        note(`Repository "${name}" already exists. Removing "${path}"...`);
+        note(`Repository "${name}" already exists. Removing "${path}"...`, "REPO");
         rmSync(path, { recursive: true, force: true });
     }
 }
@@ -27,7 +27,7 @@ export async function addRepo(name: string, url: string) {
         }
 
         rmRepoDir(path, name);
-        note(`Copying local repository "${name}" from "${url}"...`);
+        note(`Copying local repository "${name}" from "${url}"...`, "REPO");
         cpSync(url, path, { recursive: true });
         db.add(DBS.REPOS, name, path);
         return;
@@ -38,7 +38,7 @@ export async function addRepo(name: string, url: string) {
     }
 
     rmRepoDir(path, name);
-    note(`Adding "${name}"...`);
+    note(`Adding "${name}"...`, "REPO");
     const branchArg = branch ? `-b ${branch}` : "";
     execSync(`git clone ${branchArg} ${url} ${path}`);
     db.add(DBS.REPOS, name, origUrl);
@@ -46,6 +46,6 @@ export async function addRepo(name: string, url: string) {
 
 export async function addRepoMeta(name: string) {
     const path = process.env.LYTH_CFG_PATH + "repos/" + name;
-    note(`Adding meta for "${name}"...`);
+    note(`Adding meta for "${name}"...`, "REPO");
     db.add(DBS.REPOS, name, path);
 }

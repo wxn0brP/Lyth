@@ -4,7 +4,7 @@ import { note } from "./utils/log";
 import { RunCfg, runHook } from "./utils/runHook";
 
 export async function install(name: string, pkg: PkgCfg, args: string[]) {
-    if (!pkg.install) return note(`Package "${name}" has no install hook`);
+    if (!pkg.install) return note(`Package "${name}" has no install hook`, "INSTALL");
 
     const cfg: RunCfg = {
         name,

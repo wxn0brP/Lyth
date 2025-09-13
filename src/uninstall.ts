@@ -7,24 +7,24 @@ import { PkgCfg } from "./types/types";
 import db, { DBS } from "./utils/db";
 
 export default async function (args: string[]) {
-    if (args.length === 1) return note("Usage: lyth -R <package-name>");
+    if (args.length === 1) return note("Usage: lyth -R <package-name>", "UNINSTALL");
 
     let name = args[1];
     const pkgConfig = getPackage(name);
-    if (!pkgConfig) return note(`Package "${name}" not found`);
+    if (!pkgConfig) return note(`Package "${name}" not found`, "UNINSTALL");
     let pkg: PkgCfg;
     [name, pkg] = pkgConfig;
 
     const version = db.get(DBS.INSTALLED, name);
-    if (!version) return note(`Package "${name}" is not installed`);
+    if (!version) return note(`Package "${name}" is not installed`, "UNINSTALL");
 
     if (!pkg.uninstall) {
-        note(`Package "${name}" has no install hook`);
+        note(`Package "${name}" has no install hook`, "UNINSTALL");
         const pkgDir = process.env.HOME + "/apps/" + name;
         if (existsSync(pkgDir)) {
             const answer = await question(`Do you want to remove "~/apps/${name}"? (y/N) `, "n");
             if (answer.toLowerCase() === "y") {
-                note(`Removing "${name}"...`);
+                note(`Removing "${name}"...`, "UNINSTALL");
                 rmSync(pkgDir, { recursive: true });
             }
         }

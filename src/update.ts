@@ -5,7 +5,7 @@ import { note } from "./utils/log";
 import { runHook } from "./utils/runHook";
 
 export async function update(name: string, pkg: PkgCfg, version: string, args: string[]) {
-    if (!pkg.update && !pkg.install) return note(`Package "${name}" has no update hook`);
+    if (!pkg.update && !pkg.install) return note(`Package "${name}" has no update hook`, "UPDATE");
     const isUpdate = pkg.update;
 
     let latestVersion = "";
@@ -20,7 +20,7 @@ export async function update(name: string, pkg: PkgCfg, version: string, args: s
         latestVersion = latestVersion.trim() || "";
     }
 
-    if (version === latestVersion) return note(`Package "${name}" is already up to date`);
+    if (version === latestVersion) return note(`Package "${name}" is already up to date`, "UPDATE");
 
     let res = await runHook({
         name,
@@ -31,14 +31,14 @@ export async function update(name: string, pkg: PkgCfg, version: string, args: s
     });
 
     res = latestVersion || res.trim() || "0.0.0";
-    if (res === version) return note(`Package "${name}" is already up to date`);
+    if (res === version) return note(`Package "${name}" is already up to date`, "UPDATE");
     db.update(DBS.INSTALLED, name, res);
 }
 
 export async function updateAll(args: string[] = []) {
     const installed = db.getData<string>(DBS.INSTALLED);
     const pkgs = Object.keys(installed);
-    if (pkgs.length === 0) return note("No packages installed");
+    if (pkgs.length === 0) return note("No packages installed", "UPDATE");
 
     for (const pkgName of pkgs) {
         const version = installed[pkgName];

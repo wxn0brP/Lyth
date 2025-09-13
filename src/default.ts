@@ -14,13 +14,13 @@ export default async function (args: string[]) {
         name = args[0];
         await repoPullAll();
     }
-    if (!name) return note("Usage: lyth <package-name>");
+    if (!name) return note("Usage: lyth <package-name>", "INSTALL");
 
     const pkgConfig = getPackage(name);
-    if (!pkgConfig) return note(`Package "${name}" not found`);
+    if (!pkgConfig) return note(`Package "${name}" not found`, "INSTALL");
     let pkg: PkgCfg;
     [name, pkg] = pkgConfig;
-    note(`Installing "${name}"...`);
+    note(`Installing "${name}"...`, "INSTALL");
 
     const version = db.get(DBS.INSTALLED, name);
     if (version) {

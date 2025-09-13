@@ -20,7 +20,7 @@ export async function runHook(cfg: RunCfg) {
     const ext = pkg[hook];
     const path = resolve(join(dir, name, hook) + "." + ext);
     const myDir = process.cwd();
-    note(`[Run] hook ${path}`);
+    note(`[Run] hook ${path}`, "HOOK");
 
     process.env.LYTH_SRC = resolve(import.meta.dirname);
     process.env.LYTH_PKG_VERSION = version;
