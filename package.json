@@ -1,0 +1,10 @@
+{
+    "name": "@wxn0brp/lyth",
+    "version": "0.0.1",
+    "types": "index.d.ts",
+    "author": "wxn0brP",
+    "license": "MIT",
+    "files": [
+        "index.d.ts"
+    ]
+}
