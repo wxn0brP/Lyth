@@ -12,8 +12,8 @@ import { RunCfg, runHook } from "./utils/runHook";
 import { s } from "./utils/s";
 
 const app = new FalconFrame();
-
 const token = crypto.randomBytes(32).toString("hex");
+let unauthorizedTry = 0;
 
 interface Package extends PkgMeta {
     version?: string;
@@ -23,16 +23,22 @@ app.use((req, res, next) => {
     const hostHeader = req.headers.host || "";
     const hostname = hostHeader.split(":")[0];
 
-    if (hostname !== "127.0.0.1" && hostname !== "localhost") {
+    function err() {
+        unauthorizedTry++;
+        if (unauthorizedTry > 3) {
+            console.error(`[SECURITY ALERT] Detected multiple unauthorized access attempts. The server will terminate to prevent potential intrusion.`);
+            process.exit(0);
+        } else {
+            console.warn(`[WARNING] Unauthorized access attempt.`);
+        }
         res.status(403);
         return "403 Forbidden";
     }
 
+    if (hostname !== "127.0.0.1" && hostname !== "localhost") return err();
+
     const authToken = req.query.auth_token;
-    if (!authToken || authToken !== token) {
-        res.status(403);
-        return "403 Forbidden";
-    }
+    if (!authToken || authToken !== token) return err();
 
     next();
 });
