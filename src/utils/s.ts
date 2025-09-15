@@ -7,6 +7,6 @@ export async function s(args: string[]) {
         args.unshift(first);
     } else {
         await repoPullAll();
-        console.log();
+        if (!process.env.LYTH_SILENT) console.log();
     }
 }

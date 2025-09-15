@@ -13,7 +13,7 @@ export default async function (args: string[]) {
     } else {
         name = args[0];
         await repoPullAll();
-        console.log();
+        if (!process.env.LYTH_SILENT) console.log();
     }
     if (!name) return note("Usage: lyth <package-name>", "INSTALL");
 
