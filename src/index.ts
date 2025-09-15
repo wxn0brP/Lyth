@@ -47,7 +47,7 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     mod = await import("./help");
     noteDebug("[Load] Help");
 
-} else if (someCmd(["serve"], 0)) {
+} else if (someCmd(["serve", "gui"], 0)) {
     mod = await import("./serve");
     noteDebug("[Load] serve");
 

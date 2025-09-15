@@ -23,18 +23,21 @@ This will:
 ## Usage
 
 ```bash
-# Install a package
+# Install/Update a package
 # with refreshing repos (preferred)
 lyth <package-name>
 # without refreshing repos
 lyth -N <package-name>
 
+# Update all a package
+lyth
+
+# Start GUI
+lyth serve
+
 # Uninstall a package
 lyth -R <package-name>
 lyth rm <package-name>
-
-# Update all a package
-lyth
 
 # List installed packages
 lyth list

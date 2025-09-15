@@ -12,6 +12,7 @@ Commands:
     update, up                              Update all packages
     list, ls                                List installed packages
     search, s                               Search for packages
+    serve, gui                              Start Lyth GUI
 
     repo                                    Repository management
         add <name> <url>                    Add a repository
