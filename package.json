@@ -1,6 +1,6 @@
 {
     "name": "lyth",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "main": "src/index.ts",
     "description": "Lyth is a package manager for linux",
     "bin": {
@@ -20,12 +20,10 @@
     },
     "devDependencies": {
         "@types/bun": "*",
-        "@types/micromatch": "^4.0.9",
         "typescript": "*"
     },
     "dependencies": {
-        "@wxn0brp/falcon-frame": "^0.0.21",
-        "micromatch": "^4.0.8"
+        "@wxn0brp/falcon-frame": "^0.0.21"
     },
     "engines": {
         "bun": ">=1.2.20"

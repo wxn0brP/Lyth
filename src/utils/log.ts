@@ -22,12 +22,14 @@ export const categoryColors: Record<string, string> = {
 };
 
 export function note(msg: string, category: string = "INFO", ...args: any[]) {
+    if (process.env.LYTH_SILENT) return;
     const color = categoryColors[category] || colors.WHITE;
     console.log(`${color}[${category}]${colors.RESET} ${msg}`, ...args);
 }
 
 export function noteDebug(msg: string, category: string = "DEBUG", ...args: any[]) {
     if (!process.env.DEBUG) return;
+    if (process.env.LYTH_SILENT) return;
     const color = categoryColors[category] || colors.WHITE;
     console.debug(`${color}[${category}]${colors.RESET} ${msg}`, ...args);
 }

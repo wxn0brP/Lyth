@@ -2,7 +2,6 @@ import { readdirSync } from "fs";
 import { PkgCfg } from "./types/types";
 import db, { DBS } from "./utils/db";
 import { getPackage } from "./utils/getMeta";
-import { isMatch } from "micromatch";
 import { join } from "path";
 import { s } from "./utils/s";
 import { printTable } from "./utils/table";
@@ -23,16 +22,24 @@ function convert(pkg: [string, PkgCfg]): PkgMeta {
     };
 }
 
-function match(pkg: [string, PkgCfg], name: string) {
+function createRegex(name: string) {
+    const regexPattern = name
+        .split("*")
+        .map(s => s.replace(/[.+^${}()|[\]\\]/g, "\\$&"))
+        .join(".*");
+    return new RegExp(".*" + regexPattern + ".*");
+}
+
+function match(pkg: [string, PkgCfg], name: string, regex: RegExp = null) {
     if (name === "*") return true;
-    const pkgPath = pkg[0].split("/")[1];
-    if (isMatch(pkgPath, name)) return true;
+    if (!regex) regex = createRegex(name);
+    if (regex.test(pkg[0])) return true;
 
     const pkgName = pkg[1]?.name;
-    if (pkgName && isMatch(pkgName, name)) return true;
+    if (pkgName && regex.test(pkgName)) return true;
 
     const desc = pkg[1]?.description;
-    if (desc && isMatch(desc, name)) return true;
+    if (desc && regex.test(desc)) return true;
     return false;
 }
 
@@ -46,6 +53,7 @@ export async function search(name: string) {
     }
 
     const pkgs: ReturnType<typeof convert>[] = [];
+    const regex = createRegex(name);
     for (const repoName of repos) {
         const packagesNames =
             readdirSync(join(dir, repoName), { withFileTypes: true })
@@ -55,7 +63,7 @@ export async function search(name: string) {
 
         for (const pkgName of packagesNames) {
             const pkg = getPackage(repoName + "/" + pkgName);
-            if (match(pkg, name)) pkgs.push(convert(pkg));
+            if (match(pkg, name, regex)) pkgs.push(convert(pkg));
         }
     }
 
@@ -63,8 +71,10 @@ export async function search(name: string) {
 }
 
 export default async function (args: string[]) {
+    const isJson = args.includes("-json");
+    if (isJson) process.env.LYTH_SILENT = "true";
     await s(args);
     const pkgs = await search(args[1]);
-    if (pkgs.length === 0) return console.log("No packages found");
+    if (pkgs.length === 0) return isJson ? console.log("[]") : console.log("No packages found");
     printTable(pkgs, args);
 }

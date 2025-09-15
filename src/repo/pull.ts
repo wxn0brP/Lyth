@@ -27,7 +27,8 @@ export async function repoPull(name: string) {
         ? `git -C ${path} pull origin ${branch}`
         : `git -C ${path} pull`;
 
-    execSync(pullCmd, { stdio: "inherit" });
+    const isSilent = process.env.LYTH_SILENT;
+    execSync(pullCmd, { stdio: isSilent ? "ignore" : "inherit" });
 }
 
 export async function repoPullAll() {
