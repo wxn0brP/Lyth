@@ -295,7 +295,7 @@
         });
 
         window.addEventListener("beforeunload", () => {
-            // navigator.sendBeacon(`/exit?auth_token=${token}`);
+            navigator.sendBeacon(`/exit?auth_token=${token}`);
         });
     </script>
 </body>
