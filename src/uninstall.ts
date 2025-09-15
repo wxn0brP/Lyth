@@ -30,6 +30,7 @@ export default async function (args: string[]) {
         }
         return;
     }
+
     const cfg: RunCfg = {
         name,
         pkg,
@@ -38,8 +39,6 @@ export default async function (args: string[]) {
         hook: "uninstall"
     }
 
-    if (pkg.preinstall) await runHook(Object.assign({}, cfg, { hook: "preinstall" }) as RunCfg);
-
-    const installedVersion = await runHook(cfg);
-    db.update(DBS.INSTALLED, name, installedVersion.trim() || "0.0.0");
+    await runHook(cfg);
+    db.remove(DBS.INSTALLED, name);
 }

@@ -9,14 +9,22 @@ import { printTable } from "./utils/table";
 
 const dir: string = process.env.LYTH_CFG_PATH + "repos/";
 
-function convert(pkg: [string, PkgCfg]) {
+export interface PkgMeta {
+    name: string;
+    description: string;
+    icon: string;
+}
+
+function convert(pkg: [string, PkgCfg]): PkgMeta {
     return {
         name: pkg[0],
-        description: pkg[1]?.description
+        description: pkg[1]?.description,
+        icon: pkg[1]?.icon
     };
 }
 
 function match(pkg: [string, PkgCfg], name: string) {
+    if (name === "*") return true;
     const pkgPath = pkg[0].split("/")[1];
     if (isMatch(pkgPath, name)) return true;
 

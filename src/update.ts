@@ -20,7 +20,10 @@ export async function update(name: string, pkg: PkgCfg, version: string, args: s
         latestVersion = latestVersion.trim() || "";
     }
 
-    if (version === latestVersion) return note(`Package "${name}" is already up to date`, "UPDATE");
+    if (version === latestVersion) {
+        note(`Package "${name}" is already up to date`, "UPDATE");
+        return false;
+    }
 
     let res = await runHook({
         name,
@@ -33,6 +36,7 @@ export async function update(name: string, pkg: PkgCfg, version: string, args: s
     res = latestVersion || res.trim() || "0.0.0";
     if (res === version) return note(`Package "${name}" is already up to date`, "UPDATE");
     db.update(DBS.INSTALLED, name, res);
+    return true;
 }
 
 export async function updateAll(args: string[] = []) {

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lyth GUI</title>
+    <meta name="color-scheme" content="dark light">
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: #111;
+            color: #fff;
+            width: min(100%, 1000px);
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            padding-bottom: 10px;
+            margin: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #222;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+
+        li:hover {
+            transform: translateY(-1px);
+            background-color: #333;
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .text strong {
+            font-size: 1em;
+        }
+
+        .version {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        .description {
+            font-size: 0.85em;
+            margin-top: 4px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #0078d4;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.15s;
+        }
+
+        button:hover {
+            background-color: #005a9e;
+        }
+
+        button.uninstall {
+            background-color: #e81123;
+        }
+
+        button.uninstall:hover {
+            background-color: #a80016;
+        }
+
+        #searchInput {
+            width: 15rem;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 4px solid #ccc;
+            border-top: 4px solid #0078d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lyth GUI</h1>
+    <div id="loader" style="display:none; text-align:center; margin-bottom:10px;">
+        <div class="spinner"></div>
+    </div>
+    <input id="searchInput" type="text" placeholder="Search packages...">
+    <ul id="packageList"></ul>
+
+    <script type="module">
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get("auth_token");
+        const packageListEl = document.querySelector("#packageList");
+        let allPackages = [];
+
+        async function fetchData(endpoint, name) {
+            const loader = document.querySelector("#loader");
+            loader.style.display = "block";
+            try {
+                const url = new URL(`http://localhost:${window.location.port}/` + endpoint);
+                url.searchParams.set("auth_token", token);
+                if (name) url.searchParams.set("name", name);
+                const res = await fetch(url);
+                const data = await res.json();
+                return data;
+            } finally {
+                loader.style.display = "none";
+            }
+        }
+
+        function getIconUrl(pkg) {
+            if (!pkg.icon) return "";
+            try {
+                const url = new URL(pkg.icon);
+                if (!url.pathname || url.pathname === "/") {
+                    return `https://www.google.com/s2/favicons?sz=64&domain=${url.hostname}`;
+                }
+                return pkg.icon;
+            } catch {
+                return "";
+            }
+        }
+
+        function renderPackages(packages) {
+            packageListEl.innerHTML = "";
+            packages.forEach(pkg => {
+                const li = document.createElement("li");
+
+                const infoDiv = document.createElement("div");
+                infoDiv.className = "info";
+
+                const imgUrl = getIconUrl(pkg);
+                if (imgUrl) {
+                    const img = document.createElement("img");
+                    img.src = imgUrl;
+                    infoDiv.appendChild(img);
+                }
+
+                const textDiv = document.createElement("div");
+                textDiv.className = "text";
+                textDiv.innerHTML = `
+                <div>
+                    <strong>${pkg.name}</strong>
+                    <span class="version">${pkg.version ? pkg.version : "Not installed"}</span>
+                </div>
+                <div class="description">
+                    ${pkg.description}
+                </div>`;
+                infoDiv.appendChild(textDiv);
+
+                li.appendChild(infoDiv);
+
+                const btnDiv = document.createElement("div");
+                btnDiv.className = "buttons";
+
+                const actionBtn = document.createElement("button");
+                actionBtn.textContent = pkg.version ? "Update" : "Install";
+                actionBtn.onclick = async () => {
+                    try {
+                        const data = await fetchData(`install`, pkg.name);
+                        let msg = data.message;
+                        if (!msg) {
+                            if (pkg.version) {
+                                msg = data.u ? `Success updated ${pkg.name}` : `Package "${pkg.name}" is already up to date`;
+                            } else {
+                                msg = `Success installed ${pkg.name}`;
+                            }
+                        }
+
+                        alert(msg);
+                        fetchPackages();
+                    } catch (err) {
+                        alert("Request failed: " + err);
+                    }
+                };
+                btnDiv.appendChild(actionBtn);
+
+                if (pkg.version) {
+                    const uninstallBtn = document.createElement("button");
+                    uninstallBtn.textContent = "Uninstall";
+                    uninstallBtn.className = "uninstall";
+                    uninstallBtn.onclick = async () => {
+                        const answer = confirm(`Are you sure you want to uninstall ${pkg.name}?`);
+                        if (!answer) return;
+                        try {
+                            const data = await fetchData(`uninstall`, pkg.name);
+                            alert(data.message || `Success: ${pkg.name}`);
+                            fetchPackages();
+                        } catch (err) {
+                            alert("Request failed: " + err);
+                        }
+                    };
+                    btnDiv.appendChild(uninstallBtn);
+                }
+
+                li.appendChild(btnDiv);
+                packageListEl.appendChild(li);
+            });
+        }
+
+        async function fetchPackages() {
+            try {
+                allPackages = await fetchData(`packages`);
+                renderPackages(allPackages);
+            } catch (err) {
+                packageListEl.innerHTML = `<li>Error fetching packages: ${err}</li>`;
+            }
+        }
+
+        fetchPackages();
+
+        const searchInput = document.querySelector("#searchInput");
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.trim().toLowerCase();
+            if (!query) {
+                renderPackages(allPackages);
+                return;
+            }
+
+            const regexPattern = query
+                .split("*")
+                .map(s => s.replace(/[.+^${}()|[\]\\]/g, "\\$&"))
+                .join(".*");
+
+            const regex = new RegExp(".*" + regexPattern + ".*");
+
+            const filtered = allPackages.filter(pkg => {
+                const name = pkg.name.toLowerCase();
+                const desc = (pkg.description || "").toLowerCase();
+                return regex.test(name) || regex.test(desc);
+            });
+
+            renderPackages(filtered);
+        });
+
+        window.addEventListener("beforeunload", () => {
+            // navigator.sendBeacon(`/exit?auth_token=${token}`);
+        });
+    </script>
+</body>
+
+</html>

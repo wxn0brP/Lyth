@@ -6,6 +6,7 @@ export interface PkgCfg {
     getVersion?: HookType;
     preinstall?: HookType;
     description?: string;
+    icon?: string;
 }
 
 export type HookType = "sh" | "ts" | "js";
