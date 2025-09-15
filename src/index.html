@@ -172,11 +172,11 @@
         function getIconUrl(pkg) {
             if (!pkg.icon) return "";
             try {
-                const url = new URL(pkg.icon);
-                if (!url.pathname || url.pathname === "/") {
-                    return `https://www.google.com/s2/favicons?sz=64&domain=${url.hostname}`;
+                if (!pkg.icon.includes("/") && pkg.icon.includes(".")) {
+                    return `https://www.google.com/s2/favicons?sz=64&domain=${pkg.icon}`;
                 }
-                return pkg.icon;
+                const url = new URL(pkg.icon);
+                return url.origin + url.pathname;
             } catch {
                 return "";
             }
