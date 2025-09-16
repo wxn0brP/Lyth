@@ -1,8 +1,8 @@
-import { PkgCfg } from "./types/types";
-import db, { DBS } from "./utils/db";
-import { getPackage } from "./utils/getMeta";
-import { note } from "./utils/log";
-import { runHook } from "./utils/runHook";
+import { PkgCfg } from "../types/types";
+import db, { DBS } from "../utils/db";
+import { getPackage } from "../utils/getMeta";
+import { note } from "../utils/log";
+import { runHook } from "../utils/runHook";
 
 export async function update(name: string, pkg: PkgCfg, version: string, args: string[]) {
     if (!pkg.update && !pkg.install) return note(`Package "${name}" has no update hook`, "UPDATE");

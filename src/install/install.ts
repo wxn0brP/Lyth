@@ -1,7 +1,7 @@
-import { PkgCfg } from "./types/types";
-import db, { DBS } from "./utils/db";
-import { note } from "./utils/log";
-import { RunCfg, runHook } from "./utils/runHook";
+import { PkgCfg } from "../types/types";
+import db, { DBS } from "../utils/db";
+import { note } from "../utils/log";
+import { RunCfg, runHook } from "../utils/runHook";
 
 export async function install(name: string, pkg: PkgCfg, args: string[]) {
     if (!pkg.install) return note(`Package "${name}" has no install hook`, "INSTALL");

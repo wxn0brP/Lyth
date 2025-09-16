@@ -52,7 +52,7 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     noteDebug("[Load] serve");
 
 } else if (args.length > 0) {
-    mod = await import("./default");
+    mod = await import("./install");
     noteDebug("[Load] Install");
 
 } else {

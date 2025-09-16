@@ -4,12 +4,13 @@ import crypto from "crypto";
 import http from "http";
 import db, { DBS } from "./utils/db";
 import { PkgMeta, search } from "./search";
-import { update, updateAll } from "./update";
-import { install } from "./install";
+import { update, updateAll } from "./install/update";
+import { install } from "./install/install";
 import { getPackage } from "./utils/getMeta";
 import { repoPullAll } from "./repo/pull";
 import { RunCfg, runHook } from "./utils/runHook";
 import { s } from "./utils/s";
+import { uninstallUtil } from "./uninstall";
 
 const app = new FalconFrame();
 const token = crypto.randomBytes(32).toString("hex");
@@ -96,26 +97,7 @@ app.get("/install", async (req) => {
 app.get("/uninstall", async (req, res) => {
     const pkgName = req.query.name;
     if (!pkgName) return { success: false, message: "No package name provided" };
-
-    const pkgRaw = getPackage(pkgName);
-    if (!pkgRaw) return { success: false, message: "Package not found" };
-    const [name, pkg] = pkgRaw;
-
-    const version = db.get(DBS.INSTALLED, name);
-    if (!version) return { success: false, message: "Package not installed" };
-
-    const cfg: RunCfg = {
-        name,
-        pkg,
-        args: [],
-        version: "0.0.0",
-        hook: "uninstall"
-    }
-
-    await runHook(cfg);
-    db.remove(DBS.INSTALLED, name);
-
-    return { success: true };
+    return await uninstallUtil(pkgName, []);
 });
 
 const server = http.createServer(app.getApp());
