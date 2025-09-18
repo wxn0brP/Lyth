@@ -17,6 +17,7 @@ export interface DesktopEntry {
     name: string;
     exec: string;
     icon?: string;
+    iconInternal?: string;
     comment?: string;
     categories?: string[];
     terminal?: boolean;
@@ -37,9 +38,10 @@ function _resolve(path: string) {
 export function createDesktopFile(entry: DesktopEntry, dest: string) {
     const lines = [
         "[Desktop Entry]",
-        `Name="${entry.name}"`,
+        `Name=${entry.name}`,
         `Exec="${_resolve(entry.exec)}"`,
         entry.icon ? `Icon="${_resolve(entry.icon)}"` : null,
+        entry.iconInternal ? `Icon=${entry.iconInternal}"` : null,
         entry.comment ? `Comment=${entry.comment}` : null,
         `Terminal=${entry.terminal ?? false}`,
         `Type=${entry.type ?? "Application"}`,
@@ -50,6 +52,7 @@ export function createDesktopFile(entry: DesktopEntry, dest: string) {
 
     const content = lines + "\n";
 
+    if (!dest) dest = entry.name.replaceAll(" ", "_");
     if (!dest.startsWith("/")) dest = process.env.HOME + "/.local/share/applications/" + dest;
     if (!dest.endsWith(".desktop")) dest += ".desktop";
     writeFileSync(resolve(dest), content, { mode: 0o755 });
