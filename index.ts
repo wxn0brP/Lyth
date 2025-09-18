@@ -29,6 +29,7 @@ declare global {
         name: string;
         exec: string;
         icon?: string;
+        iconInternal?: string;
         comment?: string;
         categories?: string[];
         terminal?: boolean;
