@@ -8,6 +8,8 @@ Version: ${version}
 
 Commands:
     name                                    Install a package
+        -f                                  Force install (Overwrite existing files)
+
     -R, rm                                  Uninstall a package
     update, up                              Update all packages
     list, ls                                List installed packages

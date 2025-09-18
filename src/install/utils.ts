@@ -22,7 +22,7 @@ export async function installUtil(args: string[]): Promise<InstallResult> {
     if (!name) {
         return {
             success: false,
-            code: 'INVALID_ARGS',
+            code: "INVALID_ARGS",
             message: "Usage: lyth <package-name>"
         };
     }
@@ -31,7 +31,7 @@ export async function installUtil(args: string[]): Promise<InstallResult> {
     if (!pkgConfig) {
         return {
             success: false,
-            code: 'PACKAGE_NOT_FOUND',
+            code: "PACKAGE_NOT_FOUND",
             message: `Package "${name}" not found`
         };
     }
@@ -39,29 +39,29 @@ export async function installUtil(args: string[]): Promise<InstallResult> {
     let pkg: PkgCfg;
     [name, pkg] = pkgConfig;
 
-    const version = db.get(DBS.INSTALLED, name);
+    const version = args.includes("-f") ? 0 : db.get(DBS.INSTALLED, name);
 
     try {
         if (version) {
             await update(name, pkg, version, args);
             return {
                 success: true,
-                action: 'update',
+                action: "update",
                 name
             };
         } else {
             await install(name, pkg, args);
             return {
                 success: true,
-                action: 'install',
+                action: "install",
                 name
             };
         }
     } catch (error) {
         return {
             success: false,
-            code: version ? 'UPDATE_FAILED' : 'INSTALL_FAILED',
-            message: `${version ? 'Update' : 'Install'} failed for package "${name}": ${error instanceof Error ? error.message : 'Unknown error'}`
+            code: version ? "UPDATE_FAILED" : "INSTALL_FAILED",
+            message: `${version ? "Update" : "Install"} failed for package "${name}": ${error instanceof Error ? error.message : "Unknown error"}`
         };
     }
 }

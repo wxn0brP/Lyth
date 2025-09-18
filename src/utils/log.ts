@@ -18,7 +18,8 @@ export const categoryColors: Record<string, string> = {
     "LIST": colors.MAGENTA,
     "REPO": colors.YELLOW,
     "HOOK": colors.WHITE,
-    "DEBUG": colors.WHITE
+    "DEBUG": colors.WHITE,
+    "ERROR": colors.RED
 };
 
 export function note(msg: string, category: string = "INFO", ...args: any[]) {

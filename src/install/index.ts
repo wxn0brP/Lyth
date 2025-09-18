@@ -16,7 +16,7 @@ export default async function (args: string[]) {
         case "INVALID_ARGS":
         case "PACKAGE_NOT_FOUND":
         case "INSTALL_FAILED":
-            return note(result.message, "INSTALL");
+            return note(result.message, "ERROR");
         case "UPDATE_FAILED":
             return note(result.message, "UPDATE");
         default:
