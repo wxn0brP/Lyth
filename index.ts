@@ -21,8 +21,10 @@ declare global {
         /** 
          * Create a desktop file.
          * @param entry The desktop file entry.
+         * @param dest The path to the desktop file. (default: /usr/share/applications/${entry.name}.desktop)
+         * @param notOverwrite If the desktop file already exists, don't overwrite it. (default: true)
          */
-        function createDesktopFile(entry: DesktopEntry): void;
+        function createDesktopFile(entry: DesktopEntry, dest?: string, notOverwrite?: boolean): void;
     }
 
     interface DesktopEntry {
