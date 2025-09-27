@@ -40,9 +40,7 @@ export function createDesktopFile(entry: DesktopEntry, dest: string = "", notOve
     if (!dest.startsWith("/")) dest = process.env.HOME + "/.local/share/applications/" + dest;
     if (!dest.endsWith(".desktop")) dest += ".desktop";
 
-    if (existsSync(dest) && notOverride) {
-        return;
-    }
+    if (notOverride && existsSync(dest)) return;
 
     const lines = [
         "[Desktop Entry]",
