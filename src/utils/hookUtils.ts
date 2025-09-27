@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { existsSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
 globalThis._import = async (path: string) => {
@@ -35,7 +35,15 @@ function _resolve(path: string) {
     return resolve(path);
 }
 
-export function createDesktopFile(entry: DesktopEntry, dest: string) {
+export function createDesktopFile(entry: DesktopEntry, dest: string, notOverride: boolean = true) {
+    if (!dest) dest = entry.name.replaceAll(" ", "_");
+    if (!dest.startsWith("/")) dest = process.env.HOME + "/.local/share/applications/" + dest;
+    if (!dest.endsWith(".desktop")) dest += ".desktop";
+
+    if (existsSync(dest) && notOverride) {
+        return;
+    }
+
     const lines = [
         "[Desktop Entry]",
         `Name=${entry.name}`,
@@ -51,9 +59,5 @@ export function createDesktopFile(entry: DesktopEntry, dest: string) {
     ].filter(Boolean).join("\n");
 
     const content = lines + "\n";
-
-    if (!dest) dest = entry.name.replaceAll(" ", "_");
-    if (!dest.startsWith("/")) dest = process.env.HOME + "/.local/share/applications/" + dest;
-    if (!dest.endsWith(".desktop")) dest += ".desktop";
     writeFileSync(resolve(dest), content, { mode: 0o755 });
 }
