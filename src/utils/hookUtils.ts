@@ -35,7 +35,7 @@ function _resolve(path: string) {
     return resolve(path);
 }
 
-export function createDesktopFile(entry: DesktopEntry, dest: string, notOverride: boolean = true) {
+export function createDesktopFile(entry: DesktopEntry, dest: string = "", notOverride: boolean = true) {
     if (!dest) dest = entry.name.replaceAll(" ", "_");
     if (!dest.startsWith("/")) dest = process.env.HOME + "/.local/share/applications/" + dest;
     if (!dest.endsWith(".desktop")) dest += ".desktop";
