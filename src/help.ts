@@ -9,6 +9,7 @@ Version: ${version}
 Commands:
     name                                    Install a package
         -f                                  Force install (Overwrite existing files)
+        -N                                  Don't refresh repositories
 
     -R, rm                                  Uninstall a package
     update, up                              Update all packages
