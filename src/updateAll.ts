@@ -1,7 +1,7 @@
 import { updateAll } from "./install/update";
-import { s } from "./utils/s";
+import { refreshReposIfNeeded } from "./utils/s";
 
 export default async function (args: string[]) {
-    await s(args);
+    await refreshReposIfNeeded(args);
     await updateAll(args);
 }

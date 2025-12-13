@@ -8,8 +8,7 @@ import { update, updateAll } from "./install/update";
 import { install } from "./install/install";
 import { getPackage } from "./utils/getMeta";
 import { repoPullAll } from "./repo/pull";
-import { RunCfg, runHook } from "./utils/runHook";
-import { s } from "./utils/s";
+import { refreshReposIfNeeded } from "./utils/s";
 import { uninstallUtil } from "./uninstall";
 
 const app = new FalconFrame();
@@ -103,7 +102,7 @@ app.get("/uninstall", async (req, res) => {
 const server = http.createServer(app.getApp());
 
 export default async (args: string[]) => {
-    s(args);
+    refreshReposIfNeeded(args);
     server.listen(0, "127.0.0.1", () => {
         const address = server.address();
         if (typeof address === "string") return;

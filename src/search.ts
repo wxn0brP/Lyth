@@ -3,7 +3,7 @@ import { PkgCfg } from "./types/types";
 import db, { DBS } from "./utils/db";
 import { getPackage } from "./utils/getMeta";
 import { join } from "path";
-import { s } from "./utils/s";
+import { refreshReposIfNeeded } from "./utils/s";
 import { printTable } from "./utils/table";
 
 const dir: string = process.env.LYTH_CFG_PATH + "repos/";
@@ -73,7 +73,7 @@ export async function search(name: string) {
 export default async function (args: string[]) {
     const isJson = args.includes("-json");
     if (isJson) process.env.LYTH_SILENT = "true";
-    await s(args);
+    await refreshReposIfNeeded(args);
     const pkgs = await search(args[1]);
     if (pkgs.length === 0) return isJson ? console.log("[]") : console.log("No packages found");
     printTable(pkgs, args);
