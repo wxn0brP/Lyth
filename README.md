@@ -12,13 +12,17 @@ It allows you to install, uninstall, and update applications through a simple co
 Make sure [Bun](https://bun.sh/) is installed. Then run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wxn0brP/Lyth/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wxn0brP/Lyth/HEAD/install.sh | bash
 ```
 
 This will:
 * Clone the Lyth repository into `~/apps/Lyth`
 * Prepare the repository (install dependencies)
 * Create a symlink in `~/.local/bin/lyth` so you can run `lyth` from anywhere
+
+## Details Docs
+
+[Docs](https://wxn0brp.github.io/Lyth)
 
 ## Usage
 
@@ -66,4 +70,8 @@ lyth --version
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT [LICENSE](LICENSE)
+
+## Contributing
+
+Contributions are welcome! 
