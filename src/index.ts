@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+
 import { $ } from "bun";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { noteDebug } from "./utils/log";
@@ -13,22 +14,28 @@ function someCmd(requiredCmds: string[], minArgs = 1) {
     return args.length >= minArgs && requiredCmds.includes(args[0]);
 }
 
+const aliases: Record<string, [string[], number]> = {
+    uninstall: [["-R", "uninstall", "rm", "remove"], 1],
+    list: [["list", "ls"], 0],
+    search: [["search", "s"], 1],
+    updateAll: [["update", "up"], 0],
+    repo: [["repo"], 2],
+    help: [["-h", "--help"], 0],
+    serve: [["serve", "gui"], 0],
+}
+
 let mod: { default: (args: string[]) => Promise<void> };
-if (someCmd(["-R", "uninstall", "rm", "remove"])) {
-    mod = await import("./uninstall");
-    noteDebug("[Load] Uninstall");
 
-} else if (someCmd(["list", "ls"], 0)) {
-    mod = await import("./list");
-    noteDebug("[Load] List");
-
-} else if (someCmd(["search", "s"])) {
-    mod = await import("./search");
-    noteDebug("[Load] Search");
-
-} else if (someCmd(["update", "up"], 0)) {
-    mod = await import("./updateAll");
-    noteDebug("[Load] UpdateAll");
+async function checkAlias() {
+    for (const [alias, cmds] of Object.entries(aliases)) {
+        if (someCmd(cmds[0], cmds[1])) {
+            mod = await import("./" + alias);
+            return true;
+        }
+    }
+    return false;
+}
+if (await checkAlias()) {
 
 } else if (someCmd(["update-self"], 0)) {
     await $`${process.env.HOME}/apps/Lyth/update.sh`;
@@ -38,18 +45,6 @@ if (someCmd(["-R", "uninstall", "rm", "remove"])) {
     const { version } = JSON.parse(readFileSync(import.meta.dirname + "/../package.json", "utf-8"));
     console.log(version);
     process.exit(0);
-
-} else if (someCmd(["repo"], 2)) {
-    mod = await import("./repo");
-    noteDebug("[Load] Repo");
-
-} else if (someCmd(["-h", "--help"], 0)) {
-    mod = await import("./help");
-    noteDebug("[Load] Help");
-
-} else if (someCmd(["serve", "gui"], 0)) {
-    mod = await import("./serve");
-    noteDebug("[Load] serve");
 
 } else if (args.length > 0) {
     mod = await import("./install");
