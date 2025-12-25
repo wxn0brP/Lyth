@@ -1,3 +1,5 @@
+import { DesktopEntry } from "../utils/hookUtils";
+
 export interface PkgCfg {
     name: string;
     install?: HookType;
@@ -7,6 +9,14 @@ export interface PkgCfg {
     preinstall?: HookType;
     description?: string;
     icon?: string;
+    gh?: {
+        owner: string;
+        repo: string;
+        fileFN: string;
+        filePattern: string;
+        cmd?: string;
+        desktop?: DesktopEntry;
+    }
 }
 
 export type HookType = "sh" | "ts" | "js";
