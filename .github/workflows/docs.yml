@@ -37,7 +37,7 @@ jobs:
 
       - name: Build site
         run: |
-          mv README.md docs
+          mv README.md docs/README.md
           mkdocs build --clean
 
       - name: Deploy to gh-pages
