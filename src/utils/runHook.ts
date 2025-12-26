@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execSync, spawn } from "child_process";
 import { dirname, join, resolve } from "path";
 import { PkgCfg } from "../types/types";
 import { note } from "./log";
@@ -38,9 +38,8 @@ export async function runHook(cfg: RunCfg): Promise<string> {
 
     } else if (ext === "sh") {
         execSync("chmod +x " + path, { stdio: "inherit" });
-        const cmdArgs = args.map(a => `"${a}"`).join(" ");
-        const tmpRes = execSync(`${path} ${cmdArgs}`, {
-            stdio: "inherit",
+        const tmpRes = await execLive(path, args, {
+            stdio: "pipe",
             env: process.env,
             shell: userShell,
             encoding: "utf-8"
@@ -58,4 +57,33 @@ export function extractOrParse(input: string): string {
         return resMatch[1];
 
     return input;
+}
+
+async function execLive(
+    command: string,
+    args: string[],
+    options: any
+): Promise<string> {
+    return new Promise((resolve, reject) => {
+        let output = "";
+
+        const child = spawn(command, args, options);
+
+        const onData = (data: Buffer) => {
+            const text = data.toString();
+            process.stdout.write(text);
+            output += text;
+        };
+
+        child.stdout.on("data", onData);
+        child.stderr.on("data", onData);
+
+        child.on("close", (code) => {
+            if (code !== 0) {
+                reject(new Error(`Exit code ${code}`));
+            } else {
+                resolve(output);
+            }
+        });
+    });
 }
