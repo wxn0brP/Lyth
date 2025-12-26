@@ -37,7 +37,7 @@ async function checkAlias() {
 }
 if (await checkAlias()) {
 
-} else if (someCmd(["update-self"], 0)) {
+} else if (someCmd(["update-self", "self-update", "self", "lyth"], 0)) {
     await $`${process.env.HOME}/apps/Lyth/update.sh`;
     process.exit(0);
 

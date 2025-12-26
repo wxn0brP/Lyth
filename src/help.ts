@@ -29,7 +29,7 @@ Commands:
     pull-all, pa                        Update all repositories
     create-meta <name>                  Add existing repository to database
 
-  update-self                           Update lyth
+  self, lyth                            Update lyth
   -v, --version                         Show version
 `;
   console.log(str.trim());
