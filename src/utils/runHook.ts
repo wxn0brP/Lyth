@@ -13,7 +13,7 @@ export interface RunCfg {
     version: string
 }
 
-export async function runHook(cfg: RunCfg) {
+export async function runHook(cfg: RunCfg): Promise<string> {
     const { name, pkg, hook, args, version } = cfg;
     await import("./hookUtils");
 
@@ -39,14 +39,23 @@ export async function runHook(cfg: RunCfg) {
     } else if (ext === "sh") {
         execSync("chmod +x " + path, { stdio: "inherit" });
         const cmdArgs = args.map(a => `"${a}"`).join(" ");
-        res = execSync(`${path} ${cmdArgs}`, {
+        const tmpRes = execSync(`${path} ${cmdArgs}`, {
             stdio: "inherit",
             env: process.env,
             shell: userShell,
             encoding: "utf-8"
         });
+        res = extractOrParse(tmpRes.toString());
     }
 
     process.chdir(myDir);
     return res;
+}
+
+export function extractOrParse(input: string): string {
+    const resMatch = input.match(/\[res\](.*?)\[\/res\]/s);
+    if (resMatch)
+        return resMatch[1];
+
+    return input;
 }
