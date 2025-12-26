@@ -14,7 +14,11 @@ Commands:
   -R, rm                                Uninstall a package
   update, up                            Update all packages
   list, ls                              List installed packages
+    -j                                  - Output in JSON format
+
   search, s                             Search for packages
+    -j                                  - Output in JSON format
+
   serve, gui                            Start Lyth GUI
 
   repo                                  Repository management

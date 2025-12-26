@@ -1,10 +1,12 @@
+import { isJsonMode } from "./isJsonMode";
+
 /**
  * Prints an array of objects as a simple aligned table.
  * Automatically adjusts column widths based on the longest value.
- * If -json is passed (args), the data is printed as a JSON string.
+ * If -j is passed (args), the data is printed as a JSON string.
  */
 export function printTable<T extends Record<string, any>>(data: T[], args: string[] = []): void {
-    if (args.includes("-json")) {
+    if (isJsonMode(args)) {
         console.log(JSON.stringify(data));
         return;
     }

@@ -1,5 +1,6 @@
 import db, { DBS } from "./utils/db";
 import { getPackage } from "./utils/getMeta";
+import { isJsonMode } from "./utils/isJsonMode";
 import { note } from "./utils/log";
 import { printTable } from "./utils/table";
 
@@ -8,7 +9,8 @@ export default async function (args: string[]) {
     const pkgs = Object.keys(installed);
     if (pkgs.length === 0) return note("No packages installed", "LIST");
 
-    if (!args.includes("-json")) console.log("Installed packages:");
+    if (!isJsonMode(args)) console.log("Installed packages:");
+
     const packages: any = [];
     pkgs.forEach(pkgName => {
         const version = installed[pkgName];
@@ -20,5 +22,6 @@ export default async function (args: string[]) {
         };
         packages.push(pkg);
     });
+
     printTable(packages, args);
 }

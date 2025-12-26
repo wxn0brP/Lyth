@@ -5,6 +5,7 @@ import { getPackage } from "./utils/getMeta";
 import { join } from "path";
 import { refreshReposIfNeeded } from "./utils/s";
 import { printTable } from "./utils/table";
+import { isJsonMode } from "./utils/isJsonMode";
 
 const dir: string = process.env.LYTH_CFG_PATH + "repos/";
 
@@ -71,10 +72,14 @@ export async function search(name: string) {
 }
 
 export default async function (args: string[]) {
-    const isJson = args.includes("-json");
+    const isJson = isJsonMode(args);
+
     if (isJson) process.env.LYTH_SILENT = "true";
+
     await refreshReposIfNeeded(args);
     const pkgs = await search(args[1]);
+
     if (pkgs.length === 0) return isJson ? console.log("[]") : console.log("No packages found");
+
     printTable(pkgs, args);
 }

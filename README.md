@@ -32,6 +32,8 @@ This will:
 lyth <package-name>
 # without refreshing repos
 lyth -N <package-name>
+# force install (overwrite existing package)
+lyth -f <package-name>
 
 # Update all a package
 lyth
@@ -46,12 +48,12 @@ lyth rm <package-name>
 # List installed packages
 lyth list
 lyth ls
-lyth ls -json # for json output
+lyth ls -j # for json output
 
 # Search for packages
 lyth search <query>
 lyth s <query>
-lyth s <query> -json # for json output
+lyth s <query> -j # for json output
 
 # Repository management
 lyth repo add <name> <url>
